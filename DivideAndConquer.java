@@ -3,7 +3,7 @@ import java.util.Vector;
 
 public class DivideAndConquer {
 	private Route optimum = new Route();
-	private int n = 6;
+	private int n = 10;
 	private boolean isWide;
 	private Vector<City> part1 = new Vector<City>();
 	private Vector<City> part2 = new Vector<City>();

@@ -58,12 +58,11 @@ public class Main{
         // It is symmetric matrix so no need to calculate the lower half
         int count=0;
         for (int i = 0; i < DistanceTo.length; i++) {
-        	for (int j = i+1; j < DistanceTo[i].length; j++) {
+        	for (int j = 0; j < DistanceTo[i].length; j++) {
         		DistanceTo[i][j] = cities.elementAt(i).distanceTo(cities.elementAt(j));
         		count++;
         	}
         }
-       System.out.println(count);
          /*Print Distance to Array 
           for (int i = 0; i < DistanceTo.length; i++) {
         	for (int j = 0; j < DistanceTo[i].length; j++) {
@@ -71,21 +70,34 @@ public class Main{
         	}
         	System.out.println("" ); 
         }*/
+       System.out.println("Nearest Neighbour Started"); 
+       long nstartTime = System.nanoTime();
+       NearestNeighbour myNearest = new NearestNeighbour(DistanceTo, cities);  
+       long nendTime   = System.nanoTime();
+       long ntotalTime = nendTime - nstartTime;
+       Route ShortestForNearest = myNearest.Result();
+       ShortestForNearest.setxyData();
+       System.out.printf("Nearest Neighbour finished the route length is = %f \n", ShortestForNearest.length()); 
+       
         Route Greedy = new Route();
+        System.out.println("Greedy Started"); 
+        long gstartTime = System.nanoTime();
         Greedy z = new Greedy(DistanceTo);
         ArrayList<Integer> GreedyRoute = z.Result();
+        long gendTime   = System.nanoTime();
+        long gtotalTime = gendTime - gstartTime;
         for (int i = 0; i < GreedyRoute.size(); i++) { 		      
             Greedy.addToTour(cities.elementAt(GreedyRoute.get(i)));
         }  
         Greedy.setxyData();
-
-        System.out.println("Program Started"); 
-        long startTime = System.nanoTime();
+        System.out.printf("Greedy finished the route length is = %f \n", Greedy.length());
+       
       
-        
+        System.out.println("Divide&Conquer Started"); 
+        long dstartTime = System.nanoTime();
         DivideAndConquer myAlg = new DivideAndConquer(cities);  
-        long endTime   = System.nanoTime();
-        long totalTime = endTime - startTime;
+        long dendTime   = System.nanoTime();
+        long dtotalTime = dendTime - dstartTime;
         Route ShortestForDC = myAlg.Result();
         ShortestForDC.setxyData();
         System.out.printf("Divide&Conquer finished the route length is = %f \n", ShortestForDC.length()); 
@@ -109,27 +121,61 @@ public class Main{
         //cities.forEach(city -> xData[cities.indexOf(city)]= city.getX() );
         //cities.forEach(city -> yData[cities.indexOf(city)]= city.getY() );  
         // Create Chart
-        XYChart chart = new XYChartBuilder().width(800).height(500).title("Shortest Routes").xAxisTitle("X").yAxisTitle("Y").build();
+        XYChart chart = new XYChartBuilder().width(800).height(500).title("Travelling Salesman Problem").xAxisTitle("X").yAxisTitle("Y").build();
 
+        XYChart chart1 = new XYChartBuilder().width(800).height(500).title("Greedy").xAxisTitle("X").yAxisTitle("Y").build();
+        XYChart chart2 = new XYChartBuilder().width(800).height(500).title("Nearest Neighbour").xAxisTitle("X").yAxisTitle("Y").build();
+        XYChart chart3 = new XYChartBuilder().width(800).height(500).title("Divide&Conquer").xAxisTitle("X").yAxisTitle("Y").build();
+        XYChart chart4 = new XYChartBuilder().width(800).height(500).title("ShortestTour").xAxisTitle("X").yAxisTitle("Y").build();
         // Customize Chart
         chart.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Line);
         chart.getStyler().setChartTitleVisible(true);
         chart.getStyler().setLegendPosition(LegendPosition.InsideSW);
         chart.getStyler().setMarkerSize(8);
+        
         chart.addSeries("Divide&Conquer", ShortestForDC.getxData() , ShortestForDC.getyData());
         chart.addSeries("Greedy", Greedy.getxData() , Greedy.getyData());
+        chart.addSeries("Nearest Neighbour", ShortestForNearest.getxData() , ShortestForNearest.getyData());
         chart.addSeries("Absolute Solution", absoluteSol.getxData() , absoluteSol.getyData());
+        chart.addInfoContent("Shortest tour length = " + absoluteSol.length());
+        
+        chart3.addSeries("Divide&Conquer", ShortestForDC.getxData() , ShortestForDC.getyData());
+        chart1.addSeries("Greedy", Greedy.getxData() , Greedy.getyData());
+        chart2.addSeries("Nearest Neighbour", ShortestForNearest.getxData() , ShortestForNearest.getyData());
+        chart4.addSeries("Absolute Solution", absoluteSol.getxData() , absoluteSol.getyData());
+        chart4.addInfoContent("Shortest tour length = " + absoluteSol.length());
         //"Absolute Solution" "Divide&Conquer"
         chart.addInfoContent("Divide&conquer algorithm shortest tour length = " + ShortestForDC.length());
-        chart.addInfoContent("Divide&conquer execution time = " + totalTime/1000 + " miliseconds.");
+        chart.addInfoContent("Divide&conquer execution time = " + dtotalTime/1000 + " miliseconds.");
         chart.addInfoContent("Greedy algorithm shortest tour length = " + Greedy.length());
-        chart.addInfoContent("Divide&conquer execution time = " + totalTime/1000 + " miliseconds.");
+        chart.addInfoContent("Greedy Algorithm execution time = " + gtotalTime/1000 + " miliseconds.");
+        chart.addInfoContent("Nearest Neighbour shortest tour length = " + ShortestForNearest.length());
+        chart.addInfoContent("Nearest Neighbour execution time = " + ntotalTime/1000 + " miliseconds.");
         chart.addInfoContent("Shortest tour length = " + absoluteSol.length());
-        chart.getStyler().setInfoPanelVisible(true);
-      
-        chart.getStyler().setInfoPanelBorderColor(new Color(255, 255, 255));
-        new SwingWrapper(chart).displayChart();
         
-       
+        
+        chart3.addInfoContent("Divide&conquer algorithm shortest tour length = " + ShortestForDC.length());
+        chart3.addInfoContent("Divide&conquer execution time = " + dtotalTime/1000 + " miliseconds.");
+        chart1.addInfoContent("Greedy algorithm shortest tour length = " + Greedy.length());
+        chart1.addInfoContent("Greedy Algorithm execution time = " + gtotalTime/1000 + " miliseconds.");
+        chart2.addInfoContent("Nearest Neighbour shortest tour length = " + ShortestForNearest.length());
+        chart2.addInfoContent("Nearest Neighbour execution time = " + ntotalTime/1000 + " miliseconds.");
+      
+        chart.getStyler().setInfoPanelVisible(true);
+        chart1.getStyler().setInfoPanelVisible(true);
+        chart2.getStyler().setInfoPanelVisible(true);
+        chart3.getStyler().setInfoPanelVisible(true);
+        chart4.getStyler().setInfoPanelVisible(true);
+        chart.getStyler().setInfoPanelBorderColor(new Color(255, 255, 255));
+        chart1.getStyler().setInfoPanelBorderColor(new Color(255, 255, 255));
+        chart2.getStyler().setInfoPanelBorderColor(new Color(255, 255, 255));
+        chart3.getStyler().setInfoPanelBorderColor(new Color(255, 255, 255));
+        chart4.getStyler().setInfoPanelBorderColor(new Color(255, 255, 255));
+        new SwingWrapper(chart).displayChart();
+        new SwingWrapper(chart1).displayChart();
+        new SwingWrapper(chart2).displayChart();
+        new SwingWrapper(chart3).displayChart();
+        new SwingWrapper(chart4).displayChart();
+        
     }
 }

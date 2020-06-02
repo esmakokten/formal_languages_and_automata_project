@@ -42,11 +42,6 @@ public class Greedy{
     	ArrayList<Integer> s = new ArrayList<Integer>();
     	boolean isFirst=true;
     	ArrayList<Integer> firstSeg = Segments.get(0);
-    	for (int i1 = 0; i1 < firstSeg.size(); i1++) {
-        	System.out.print( " "+ firstSeg.get(i1)); 
-        }
-		System.out.println( " "); 
-		System.out.println("-----------------" ); 
     	for (int i = 1; i < 48; i++) {
 	    	ArrayList<Integer> nextSeg= Segments.get(i);
 	    	isFirst=true;
@@ -67,7 +62,6 @@ public class Greedy{
     private void selectEdge() {
     	for (int i = 0; i < Edges.length; i++) {
     		int [] edge = Edges[i];
-    		System.out.println( edge[0] +" "+ edge[1]); 
 	    	ArrayList<Integer> segment1 = Segments.get(edge[0]);
 	    	ArrayList<Integer> segment2 = Segments.get(edge[1]);
 	    	if(segment1.get(0) != segment2.get(0)) {
@@ -107,12 +101,6 @@ public class Greedy{
 		    		}
 		    	}
 	    	}
-	    	System.out.println(edge[0] +"--- ");
-	    	for (int i1 = 0; i1 < Segments.get(edge[0]).size(); i1++) {
-	        	System.out.print(  Segments.get(edge[0]).get(i1)+ " "); 
-	        }
-			System.out.println( " "); 
-			System.out.println("-----------------" ); 
     	}
     }
     
