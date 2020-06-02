@@ -40,13 +40,11 @@ public class Route {
 	  City currCity = en.nextElement();
 	  City nextCity;
       while(en.hasMoreElements()) {
-      	if(en.hasMoreElements()) {
       		nextCity = en.nextElement();
       		total += currCity.distanceTo(nextCity);
       		currCity = nextCity;
-      	}
-      	total += Tour.lastElement().distanceTo(Tour.firstElement());
       }
+      total += Tour.lastElement().distanceTo(Tour.firstElement());
       this.length = total;
   }
   
@@ -56,11 +54,9 @@ public class Route {
 	  City currCity = en.nextElement();
 	  City nextCity;
       while(en.hasMoreElements()) {
-      	if(en.hasMoreElements()) {
       		nextCity = en.nextElement();
       		total += currCity.distanceTo(nextCity);
       		currCity = nextCity;
-      	}
       }
       this.segmentLength = total;
   }

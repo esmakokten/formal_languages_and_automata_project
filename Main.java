@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.Stack;
@@ -55,25 +56,34 @@ public class Main{
 		}*/
         
         // It is symmetric matrix so no need to calculate the lower half
+        int count=0;
         for (int i = 0; i < DistanceTo.length; i++) {
-        	for (int j = i; j < DistanceTo[i].length; j++) {
+        	for (int j = i+1; j < DistanceTo[i].length; j++) {
         		DistanceTo[i][j] = cities.elementAt(i).distanceTo(cities.elementAt(j));
+        		count++;
         	}
         }
-       
-        /* Print Distance to Array 
-         * for (int i = 0; i < DistanceTo.length; i++) {
+       System.out.println(count);
+         /*Print Distance to Array 
+          for (int i = 0; i < DistanceTo.length; i++) {
         	for (int j = 0; j < DistanceTo[i].length; j++) {
-        		System.out.printf("%f-",DistanceTo[i][j] );
+        		//System.out.printf("%f-",DistanceTo[i][j] );
         	}
         	System.out.println("" ); 
         }*/
+        Route Greedy = new Route();
+        Greedy z = new Greedy(DistanceTo);
+        ArrayList<Integer> GreedyRoute = z.Result();
+        for (int i = 0; i < GreedyRoute.size(); i++) { 		      
+            Greedy.addToTour(cities.elementAt(GreedyRoute.get(i)));
+        }  
+        Greedy.setxyData();
 
-        System.out.println("Program Started" ); 
+        System.out.println("Program Started"); 
         long startTime = System.nanoTime();
       
         
-        DivideAndConquer myAlg = new DivideAndConquer( cities);  
+        DivideAndConquer myAlg = new DivideAndConquer(cities);  
         long endTime   = System.nanoTime();
         long totalTime = endTime - startTime;
         Route ShortestForDC = myAlg.Result();
@@ -107,9 +117,12 @@ public class Main{
         chart.getStyler().setLegendPosition(LegendPosition.InsideSW);
         chart.getStyler().setMarkerSize(8);
         chart.addSeries("Divide&Conquer", ShortestForDC.getxData() , ShortestForDC.getyData());
+        chart.addSeries("Greedy", Greedy.getxData() , Greedy.getyData());
         chart.addSeries("Absolute Solution", absoluteSol.getxData() , absoluteSol.getyData());
         //"Absolute Solution" "Divide&Conquer"
         chart.addInfoContent("Divide&conquer algorithm shortest tour length = " + ShortestForDC.length());
+        chart.addInfoContent("Divide&conquer execution time = " + totalTime/1000 + " miliseconds.");
+        chart.addInfoContent("Greedy algorithm shortest tour length = " + Greedy.length());
         chart.addInfoContent("Divide&conquer execution time = " + totalTime/1000 + " miliseconds.");
         chart.addInfoContent("Shortest tour length = " + absoluteSol.length());
         chart.getStyler().setInfoPanelVisible(true);
