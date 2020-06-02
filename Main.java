@@ -34,8 +34,7 @@ public class Main{
             cities.add(new City(x,y));
         }
         sc.close();
-        
-        
+    
         Route absoluteSol = new Route();
         File sol = new File("C:\\Users\\z00442AS\\Desktop\\SCHOOL\\FormalLanguages\\att48_s.txt");
         Scanner scc = new Scanner(sol);
@@ -71,8 +70,12 @@ public class Main{
         }*/
 
         System.out.println("Program Started" ); 
+        long startTime = System.nanoTime();
+      
         
-        DivideAndConquer myAlg = new DivideAndConquer( cities);
+        DivideAndConquer myAlg = new DivideAndConquer( cities);  
+        long endTime   = System.nanoTime();
+        long totalTime = endTime - startTime;
         Route ShortestForDC = myAlg.Result();
         ShortestForDC.setxyData();
         System.out.printf("Divide&Conquer finished the route length is = %f \n", ShortestForDC.length()); 
@@ -104,9 +107,10 @@ public class Main{
         chart.getStyler().setLegendPosition(LegendPosition.InsideSW);
         chart.getStyler().setMarkerSize(8);
         chart.addSeries("Divide&Conquer", ShortestForDC.getxData() , ShortestForDC.getyData());
-       // chart.addSeries("Absolute Solution", absoluteSol.getxData() , absoluteSol.getyData());
+        chart.addSeries("Absolute Solution", absoluteSol.getxData() , absoluteSol.getyData());
         //"Absolute Solution" "Divide&Conquer"
         chart.addInfoContent("Divide&conquer algorithm shortest tour length = " + ShortestForDC.length());
+        chart.addInfoContent("Divide&conquer execution time = " + totalTime/1000 + " miliseconds.");
         chart.addInfoContent("Shortest tour length = " + absoluteSol.length());
         chart.getStyler().setInfoPanelVisible(true);
       
