@@ -20,9 +20,7 @@ public class Greedy{
         sortEdges();
         selectEdge();
         createCircle();
-        for (int i = 0; i < Segments.get(0).size(); i++) {
-        	System.out.println( Segments.get(0).get(i)); 
-        }
+        
     }
     public ArrayList<Integer> Result() {
     	return Segments.get(0);
@@ -43,14 +41,17 @@ public class Greedy{
     private void createCircle () {
     	ArrayList<Integer> s = new ArrayList<Integer>();
     	boolean isFirst=true;
-    	Enumeration<ArrayList<Integer>> en = Segments.elements();
-    	ArrayList<Integer> firstSeg = en.nextElement();
-    	ArrayList<Integer> nextSeg;
-    	while (en.hasMoreElements()) {
-    		isFirst=true;
-    		nextSeg = en.nextElement();
-    		for (int i = 0; i < s.size(); i++) {
-				if (s.get(i)==nextSeg.get(0)||s.get(i)==nextSeg.get(nextSeg.size()-1)) {
+    	ArrayList<Integer> firstSeg = Segments.get(0);
+    	for (int i1 = 0; i1 < firstSeg.size(); i1++) {
+        	System.out.print( " "+ firstSeg.get(i1)); 
+        }
+		System.out.println( " "); 
+		System.out.println("-----------------" ); 
+    	for (int i = 1; i < 48; i++) {
+	    	ArrayList<Integer> nextSeg= Segments.get(i);
+	    	isFirst=true;
+    		for (int i1 = 0; i1 < s.size(); i1++) {
+				if (s.get(i1)==nextSeg.get(0)||s.get(i1)==nextSeg.get(nextSeg.size()-1)) {
 					isFirst=false;
 				}
     		}
@@ -59,7 +60,6 @@ public class Greedy{
     			s.add(nextSeg.get(nextSeg.size()-1));
     			firstSeg.addAll(nextSeg);
     		}
-    		
     	}
     	Segments.put(0, firstSeg);
     }
@@ -70,41 +70,49 @@ public class Greedy{
     		System.out.println( edge[0] +" "+ edge[1]); 
 	    	ArrayList<Integer> segment1 = Segments.get(edge[0]);
 	    	ArrayList<Integer> segment2 = Segments.get(edge[1]);
-	    	if (segment1.get(0)==edge[0]) {
-	    		if (segment2.get(0)==edge[1]) {
-	    			Collections.reverse(Segments.get(edge[0]));
-	    			Segments.get(edge[0]).addAll(Segments.get(edge[1]));
-	    			Segments.put(edge[1], Segments.get(edge[0]));
-	    			for (int j = 0; j < Segments.get(edge[0]).size(); j++) {
-	    				Segments.put(Segments.get(edge[0]).get(j), Segments.get(edge[0]));
-	    			}
-	    			
-	    		}
-	    		else if (segment2.get(segment2.size()-1)==edge[1]) {
-	    			Segments.get(edge[1]).addAll(Segments.get(edge[0]));
-	    			Segments.put(edge[0], Segments.get(edge[1]));
-	    			for (int j = 0; j < Segments.get(edge[1]).size(); j++) {
-	    				Segments.put(Segments.get(edge[1]).get(j), Segments.get(edge[1]));
-	    			}
-	    		}
+	    	if(segment1.get(0) != segment2.get(0)) {
+		    	if (segment1.get(0)==edge[0]) {
+		    		if (segment2.get(0)==edge[1]) {
+		    			Collections.reverse(Segments.get(edge[0]));
+		    			Segments.get(edge[0]).addAll(Segments.get(edge[1]));
+		    			Segments.put(edge[1], Segments.get(edge[0]));
+		    			for (int j = 0; j < Segments.get(edge[0]).size(); j++) {
+		    				Segments.put(Segments.get(edge[0]).get(j), Segments.get(edge[0]));
+		    			}
+		    			
+		    		}
+		    		else if (segment2.get(segment2.size()-1)==edge[1]) {
+		    			Segments.get(edge[1]).addAll(Segments.get(edge[0]));
+		    			Segments.put(edge[0], Segments.get(edge[1]));
+		    			for (int j = 0; j < Segments.get(edge[1]).size(); j++) {
+		    				Segments.put(Segments.get(edge[1]).get(j), Segments.get(edge[1]));
+		    			}
+		    		}
+		    	}
+		    	else if (segment1.get(segment1.size()-1)==edge[0]) {
+		    		if (segment2.get(0)==edge[1]) {
+		    			Segments.get(edge[0]).addAll(Segments.get(edge[1]));
+		    			Segments.put(edge[1], Segments.get(edge[0]));
+		    			for (int j = 0; j < Segments.get(edge[0]).size(); j++) {
+		    				Segments.put(Segments.get(edge[0]).get(j), Segments.get(edge[0]));
+		    			}
+		    		}
+		    		else if (segment2.get(segment2.size()-1)==edge[1]) {
+		    			Collections.reverse(Segments.get(edge[1]));
+		    			Segments.get(edge[0]).addAll(Segments.get(edge[1]));
+		    			Segments.put(edge[1], Segments.get(edge[0]));
+		    			for (int j = 0; j < Segments.get(edge[1]).size(); j++) {
+		    				Segments.put(Segments.get(edge[1]).get(j), Segments.get(edge[1]));
+		    			}
+		    		}
+		    	}
 	    	}
-	    	else if (segment1.get(segment1.size()-1)==edge[0]) {
-	    		if (segment2.get(0)==edge[1]) {
-	    			Segments.get(edge[0]).addAll(Segments.get(edge[1]));
-	    			Segments.put(edge[1], Segments.get(edge[0]));
-	    			for (int j = 0; j < Segments.get(edge[0]).size(); j++) {
-	    				Segments.put(Segments.get(edge[0]).get(j), Segments.get(edge[0]));
-	    			}
-	    		}
-	    		else if (segment2.get(segment2.size()-1)==edge[1]) {
-	    			Collections.reverse(Segments.get(edge[1]));
-	    			Segments.get(edge[0]).addAll(Segments.get(edge[1]));
-	    			Segments.put(edge[1], Segments.get(edge[0]));
-	    			for (int j = 0; j < Segments.get(edge[1]).size(); j++) {
-	    				Segments.put(Segments.get(edge[1]).get(j), Segments.get(edge[1]));
-	    			}
-	    		}
-	    	}	  
+	    	System.out.println(edge[0] +"--- ");
+	    	for (int i1 = 0; i1 < Segments.get(edge[0]).size(); i1++) {
+	        	System.out.print(  Segments.get(edge[0]).get(i1)+ " "); 
+	        }
+			System.out.println( " "); 
+			System.out.println("-----------------" ); 
     	}
     }
     
